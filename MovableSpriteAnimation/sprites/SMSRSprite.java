@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 
 public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	
+	private static Image image;	
 	private double centerX = 0;
 	private double centerY = 0;
 	private double width = 50;
@@ -13,111 +14,105 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	private double velocityX = 0;
 	private double velocityY = 0;
 	
-	SMSRSprite(double centerX, double centerY) {
+
+	
+	public SMSRSprite(double centerX, double centerY) {
+
 		this.centerX = centerX;
 		this.centerY = centerY;
+		
+		if (image == null) {
+			try {
+				image = ImageIO.read(new File("res/SMSRsprite1.png"));
+				//set the height and width based on the actual size of the image
+				this.height = SMSRSprite.image.getHeight(null);
+				this.width = SMSRSprite.image.getWidth(null);
+			}
+			catch (IOException e) {
+				System.out.println(e.toString());
+			}		
+		}		
 	}
 
-	@Override
+	public Image getImage() {
+		return image;
+	}
+	
 	public void setCenterX(double centerX) {
 		this.centerX = centerX;
 	}
 
-	@Override
 	public void setCenterY(double centerY) {
 		this.centerY = centerY;
-
-	}
-
-	@Override
-	public void setVelocityX(double pixelsPerSecond) {
-		this.velocityX = pixelsPerSecond;
-		}
-
-	@Override
-	public void setVelocityY(double pixelsPerSecond) {
-		velocityY = pixelsPerSecond;
-		}
-
-	
-	
-	@Override
-	public Image getImage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean getVisible() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public double getMinX() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getMaxX() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getMinY() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getMaxY() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getCenterX() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getCenterY() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean getDispose() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
-	
-	@Override
-	public void setDispose(boolean dispose) {
-		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+	public void setVelocityX(double pixelsPerSecond) {
+		this.velocityX = pixelsPerSecond;
+		
+	}
+
+	public void setVelocityY(double pixelsPerSecond) {
+		this.velocityY = pixelsPerSecond;
+		
+	}
+
+
+	
+	//DISPLAYABLE
+	
+	public boolean getVisible() {
+		return true;
+	}
+	
+	public double getMinX() {
+		return centerX - (width / 2);
+	}
+
+	public double getMaxX() {
+		return centerX + (width / 2);
+	}
+
+	public double getMinY() {
+		return centerY - (height / 2);
+	}
+
+	public double getMaxY() {
+		return centerY + (height / 2);
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public double getCenterX() {
+		return centerX;
+	};
+
+	public double getCenterY() {
+		return centerY;
+	};
+	
+	
+	public boolean getDispose() {
+		return dispose;
+	}
+
+	public void setDispose(boolean dispose) {
+		this.dispose = dispose;
+	}
+
+
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
-		// TODO Auto-generated method stub
+		
+		
+		this.centerX += actual_delta_time * 0.001 * velocityX;
+		this.centerY += actual_delta_time * 0.001 * velocityY;
 		
 	}
 }
+
