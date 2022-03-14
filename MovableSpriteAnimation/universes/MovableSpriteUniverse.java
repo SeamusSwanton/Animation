@@ -8,6 +8,7 @@ public class MovableSpriteUniverse implements Universe {
 	private ArrayList<DisplayableSprite> sprites = new ArrayList<DisplayableSprite>();
 	private long elapsedTime = 0;
 	private String status = "";
+	public int keyboardState;
 
 	private final double VELOCITY = 200;	
 	
@@ -20,12 +21,12 @@ public class MovableSpriteUniverse implements Universe {
 	this.setXCenter(0);
 	this.setYCenter(0);
 
-	player1 = new SMSRSprite();
+	player1 = new SMSRSprite(0,0);
 	sprites.add(player1);
 
 	MovableSprite movable = (MovableSprite)player1;
-	movable.setCenterX(-300);
-	movable.setCenterY(-200);
+	movable.setCenterX(0);
+	movable.setCenterY(0);
 	
 }
 	
@@ -78,18 +79,22 @@ public class MovableSpriteUniverse implements Universe {
 		//LEFT	
 		if (keyboard.keyDown(37)) {
 			velocityX = -VELOCITY;
+			keyboardState = 1;
 		}
 		//UP
 		if (keyboard.keyDown(38)) {
-			velocityY = -VELOCITY;			
+			velocityY = -VELOCITY;
+			keyboardState = 2;
 		}
 		// RIGHT
 		if (keyboard.keyDown(39)) {
 			velocityX += VELOCITY;
+			keyboardState = 3;
 		}
 		// DOWN
 		if (keyboard.keyDown(40)) {
-			velocityY += VELOCITY;			
+			velocityY += VELOCITY;
+			keyboardState = 4;
 		}
 		
 		for (int i = 0; i < sprites.size(); i++) {

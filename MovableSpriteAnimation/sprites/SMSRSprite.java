@@ -6,8 +6,8 @@ import javax.imageio.ImageIO;
 public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	
 	private static Image image;	
-	private double centerX = 0;
-	private double centerY = 0;
+	private double centerX = 400;
+	private double centerY = 300;
 	private double width = 50;
 	private double height = 50;
 	private boolean dispose = false;	
@@ -33,6 +33,8 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 			}		
 		}		
 	}
+
+
 
 	public Image getImage() {
 		return image;
