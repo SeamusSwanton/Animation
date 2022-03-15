@@ -5,7 +5,13 @@ import javax.imageio.ImageIO;
 
 public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	
-	private static Image image;	
+	private static final double VELOCITY = 200;
+	private static final int WIDTH = 50;
+	private static final int HEIGHT = 50;
+	private static final int PERIOD_LENGTH = 200;
+	private static final int IMAGES_IN_CYCLE = 1;
+	
+	private static Image[] images;	
 	private double centerX = 400;
 	private double centerY = 300;
 	private double width = 50;
@@ -13,7 +19,16 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	private boolean dispose = false;	
 	private double velocityX = 0;
 	private double velocityY = 0;
+	private int elapsedTime = 0;
 	
+	private Direction direction = Direction.NEUTRAL;
+	
+	private enum Direction { NEUTRAL(0), DOWN(1), LEFT(2), UP(3), RIGHT(4);
+		private int value = 0;
+		private Direction(int value) {
+			this.value = value; 
+		} 
+	};
 
 	
 	public SMSRSprite(double centerX, double centerY) {
@@ -21,15 +36,17 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 		this.centerX = centerX;
 		this.centerY = centerY;
 		
-		if (image == null) {
+		if (images == null) {
 			try {
-				image = ImageIO.read(new File("res/SMSRsprite1.png"));
-				//set the height and width based on the actual size of the image
-				this.height = SMSRSprite.image.getHeight(null);
-				this.width = SMSRSprite.image.getWidth(null);
+				images = new Image[8];
+				for (int i = 0; i < 8; i++) {
+					String path = String.format("res/SMSRsprite-%d.png", i);
+					images[i] = ImageIO.read(new File(path));
+				}
 			}
 			catch (IOException e) {
-				System.out.println(e.toString());
+				System.err.println(e.toString());
+
 			}		
 		}		
 	}
@@ -37,7 +54,16 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 
 
 	public Image getImage() {
-		return image;
+		
+		//calculate how many periods of 200 milliseconds have elapsed since this sprite was instantiated?
+		long period = elapsedTime  / PERIOD_LENGTH;
+		//calculate which image (aka 'frame') of the sprite animation should be shown out of the cycle of images
+		int image = (int) (period % IMAGES_IN_CYCLE);
+		//calculate index into array of all images. this is an arbitrary value, depending on how the image files are ordered
+		int index = direction.value * IMAGES_IN_CYCLE + image;
+						
+		return SMSRSprite.images[index];
+				
 	}
 	
 	public void setCenterX(double centerX) {
@@ -110,6 +136,8 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 
 
 	public void update(Universe universe, KeyboardInput keyboard, long actual_delta_time) {
+		
+		elapsedTime += actual_delta_time;
 		
 		
 		this.centerX += actual_delta_time * 0.001 * velocityX;
