@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import BlinkySprite.Direction;
+
 public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	
 	private static final double VELOCITY = 200;
@@ -38,8 +40,8 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 		
 		if (images == null) {
 			try {
-				images = new Image[8];
-				for (int i = 0; i < 8; i++) {
+				images = new Image[3];
+				for (int i = 0; i < 3; i++) {
 					String path = String.format("res/SMSRsprite-%d.png", i);
 					images[i] = ImageIO.read(new File(path));
 				}
@@ -55,12 +57,9 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 
 	public Image getImage() {
 		
-		//calculate how many periods of 200 milliseconds have elapsed since this sprite was instantiated?
-		long period = elapsedTime  / PERIOD_LENGTH;
-		//calculate which image (aka 'frame') of the sprite animation should be shown out of the cycle of images
-		int image = (int) (period % IMAGES_IN_CYCLE);
+		
 		//calculate index into array of all images. this is an arbitrary value, depending on how the image files are ordered
-		int index = direction.value * IMAGES_IN_CYCLE + image;
+		int index = direction.value;
 						
 		return SMSRSprite.images[index];
 				
@@ -119,11 +118,11 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 
 	public double getCenterX() {
 		return centerX;
-	};
+	}
 
 	public double getCenterY() {
 		return centerY;
-	};
+	}
 	
 	
 	public boolean getDispose() {
@@ -142,6 +141,26 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 		
 		this.centerX += actual_delta_time * 0.001 * velocityX;
 		this.centerY += actual_delta_time * 0.001 * velocityY;
+		
+		if (velocityY < 0) {
+			direction = Direction.UP;
+		}
+		
+		else if (velocityY > 0) {
+			direction = Direction.DOWN;
+		}
+		
+		else if (velocityX < 0) {
+			direction = Direction.LEFT;
+		}
+		
+		else if (velocityX > 0) {
+			direction = Direction.RIGHT;
+		}
+		
+		else if (velocityX == 0 && velocityY == 0) {
+			direction = Direction.NEUTRAL;
+		}
 		
 	}
 }
