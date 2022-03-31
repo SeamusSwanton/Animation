@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import BlinkySprite.Direction;
 
 public class SMSRSprite implements DisplayableSprite, MovableSprite {
 	
@@ -40,8 +39,8 @@ public class SMSRSprite implements DisplayableSprite, MovableSprite {
 		
 		if (images == null) {
 			try {
-				images = new Image[3];
-				for (int i = 0; i < 3; i++) {
+				images = new Image[5];
+				for (int i = 0; i < 5; i++) {
 					String path = String.format("res/SMSRsprite-%d.png", i);
 					images[i] = ImageIO.read(new File(path));
 				}
